@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:simpleType name="itemType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="file"/>
+      <xs:enumeration value="dir"/>
+      <xs:enumeration value="device"/>
+      <xs:enumeration value="trefile"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="algorithmList">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="gost341194-crypto"/>
+      <xs:enumeration value="gost341194-test"/>
+	  <xs:enumeration value="gost341112-512"/>
+	  <xs:enumeration value="gost341112-256"/>
+      <xs:enumeration value="fix-level1"/>
+      <xs:enumeration value="fix-level3"/>
+      <xs:enumeration value="fix-vks"/>
+      <xs:enumeration value="md5"/>
+      <xs:enumeration value="crc8"/>
+      <xs:enumeration value="crc16"/>
+      <xs:enumeration value="crc32"/>
+      <xs:enumeration value="sha1"/>
+      <xs:enumeration value="sha2-224"/>
+      <xs:enumeration value="sha2-256"/>
+      <xs:enumeration value="sha2-384"/>
+      <xs:enumeration value="sha2-512"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PROJECT">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ALGORITHMS"/>
+        <xs:element ref="FILTERS" />
+        <xs:element ref="LOCATIONS"/>
+        <xs:element ref="CHECKSUM" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="required"/>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="start_time" type="xs:nonNegativeInteger" use="required"/>
+      <xs:attribute name="end_time" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ALGORITHMS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ALGORITHM" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ALGORITHM">
+    <xs:complexType>
+      <xs:attribute name="short_name" type="algorithmList" use="required"/>
+      <xs:attribute name="full_name" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FILTERS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FILTER" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="case_sensitivity" type="xs:boolean" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FILTER">
+    <xs:complexType>
+      <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LOCATIONS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="LOCATION" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LOCATION">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ITEM"/>
+      </xs:sequence>
+      <xs:attribute name="path" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ITEM">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ITEM" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="CHECKSUM" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="type" type="itemType" use="required"/>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="mtime" type="xs:string" use="required"/>
+      <xs:attribute name="ctime" type="xs:string" use="required"/>
+      <xs:attribute name="size" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CHECKSUM">
+    <xs:complexType>
+      <xs:attribute name="algorithm" type="algorithmList" use="required"/>
+      <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
